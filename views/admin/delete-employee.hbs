@@ -1,0 +1,46 @@
+<main>
+
+  <div
+    class="row row-cols-1 row-cols-sm-1 row-cols-md-2 g-3 justify-content-center py-5"
+  >
+    <div class="col">
+      <div class="card shadow-sm text-center">
+
+        <div class="card-body">
+          <p class="card-title fw-bold fs-3">
+            ¿Desea Eliminar este empleado?</p>
+
+          <h4 class="card-text fw-bold">
+            {{item.Nombre}}
+            {{item.Apellido}}
+            /
+            {{item.Cedula}}
+          </h4>
+
+          <div class="d-flex justify-content-center align-items-center">
+                <form action="/delete" method="post">
+
+                    <button
+                    type="submit"
+                    class="btn btn-lg btn-danger"
+                    >Si
+                    </button>
+
+                    <a
+                    type="button"
+                    href="/admin-employee"
+                    class="btn btn-lg btn-success"
+                    >No
+                    </a>
+
+                    <input type="hidden" name="Id" value="{{item.Id}}" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>

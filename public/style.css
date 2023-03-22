@@ -1,0 +1,24 @@
+.img-employee {
+  height: 150px;
+}
+
+.card-img-overlay {
+  background-color: rgba(#000, 0.4);
+}
+
+.gradient {
+  background: -webkit-linear-gradient(#ff6b08, #cf23cf, #eedd44);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.login,
+.image {
+  min-height: 100vh;
+}
+
+.bg-image {
+  background-image: url("https://bootstrapious.com/i/snippets/sn-page-split/bg.jpg");
+  background-size: cover;
+  background-position: center center;
+}
