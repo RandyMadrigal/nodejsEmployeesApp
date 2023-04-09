@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">NOMBRE DE LA EMPRESA SRL.</h1>
-        <a href="/admin-options" class="btn btn-success my-2">Admin-options</a>
+        <a href="/admin-options" class="btn btn-success my-2">Volver a opciones</a>
       </div>
     </div>
   </section>
@@ -18,33 +18,51 @@
               <th scope="col">Nombre</th>
               <th scope="col">Departamento</th>
               <th scope="col">Cargo</th>
-              <th scope="col">Genero</th>
               <th scope="col">Ingreso Bruto</th>
               <th scope="col">Sueldo Anual</th>
               <th scope="col">AFP 2.87</th>
               <th scope="col">ISR </th>
               <th scope="col">SFS 3.04</th>
-              <th scope="col">Total Descuentos</th>
               <th scope="col">Neto</th>
+              <th scope="col"></th>
 
             </tr>
           </thead>
           <tbody class="table-group-divider">
             {{#if hasItems}}
               {{#each item}}
-                <tr>
-                  <td>{{this.Nombre}} {{this.Apellido}} </td>
-                  <td>{{this.Departamento}} </td>
-                  <td>{{this.Cargo}} </td>
-                  <td>{{this.Genero}} </td>
-                  <td> {{this.Sueldo}}</td>
-                  <td> {{ANUAL this.Sueldo}}</td>
-                  <td> {{AFP this.Sueldo}}</td>
-                  <td> {{ISR this.Sueldo}}</td>
-                  <td> {{SFS this.Sueldo}}</td>
-                  <td> {{Descuentos this.Sueldo}}</td>
-                  <td> {{SueltoNeto this.Sueldo}} </td>
-                </tr>
+                <form action="/admin-nomina" method="post">
+                  <tr>
+                    <td>{{this.Nombre}} {{this.Apellido}} </td>
+                    <td>{{this.department.dataValues.Nombre}} </td>
+                    <td>{{this.position.dataValues.Nombre}} </td>
+                    <td>
+                      <input
+                        class="form-control"
+                        required
+                        type="number"
+                        name="Sueldo"
+                        id="Sueldo"
+                        value="{{this.Sueldo}}"
+                        min="10000"
+                        max="1000000"
+                      /></td>
+
+                    <td> {{ANUAL this.Sueldo}} </td>
+                    <td> {{AFP this.Sueldo}}</td>
+                    <td> {{ISR this.Sueldo}}</td>
+                    <td> {{SFS this.Sueldo}}</td>
+                    <td> {{SueltoNeto this.Sueldo}} </td>
+                    <td>
+                      <button
+                        class="btn btn-outline-primary"
+                        type="submit"
+                      >Aplicar</button></td>
+                  </tr>
+
+                  <input type="hidden" name="Id" id="Id" value="{{this.Id}}" />
+
+                </form>
               {{/each}}
             {{/if}}
 

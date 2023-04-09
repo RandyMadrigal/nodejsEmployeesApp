@@ -1,5 +1,4 @@
-const { DATEONLY } = require("sequelize");
-const Sequelize = require("sequelize");
+const { DATEONLY, Sequelize } = require("sequelize");
 
 const sequelize = require("../util/database/database");
 
@@ -57,32 +56,34 @@ const employees = sequelize.define(
       allowNull: false,
     },
 
-    Departamento: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-
-    Cargo: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-
     Sueldo: {
       type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
-    Vacaciones: {
+
+    isVacaciones: {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
     },
+
+    StartVacaciones: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+
+    EndVacaciones: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+
     createdAt: {
       type: Sequelize.DataTypes.DATEONLY,
     },
   },
   {
     timestamps: true,
-    createdAt: true, // don't add createdAt attribute
-    updatedAt: false,
+    createdAt: true,
+    updatedAt: false, // don't add updateAt attribute
   }
 );
 

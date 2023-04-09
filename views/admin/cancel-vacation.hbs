@@ -7,18 +7,15 @@
       <div class="card shadow-sm text-center">
 
         <div class="card-body">
-          <p class="card-title fw-bold fs-3">
-            ¿Desea Eliminar este empleado?</p>
+          <p class="card-title fw-bold fs-4">
+            ¿Desea cancelar las vacaciones de {{item.Nombre}} {{item.Apellido}}?</p>
 
-          <h4 class="card-text fw-bold">
-            {{item.Nombre}}
-            {{item.Apellido}}
-            /
-            {{item.Cedula}}
-          </h4>
+          <p class="card-text fw-bold fs-5">
+            Desde: {{item.StartVacaciones}} /  Hasta: {{item.EndVacaciones}}
+          </p>
 
           <div class="d-flex justify-content-center align-items-center">
-                <form action="/delete" method="post">
+                <form action="/cancel" method="post">
 
                     <button
                     type="submit"
@@ -28,7 +25,7 @@
 
                     <a
                     type="button"
-                    href="/admin-employee"
+                    href="/vacation-manager"
                     class="btn btn-lg btn-success"
                     >No
                     </a>

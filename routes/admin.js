@@ -4,6 +4,8 @@ const router = express.Router();
 const adminController = require("../controllers/admin");
 
 router.get("/index", adminController.getIndex); //home admin
+router.post("/index", adminController.postFilterIndex); //home admin
+
 router.get("/add-employee", adminController.getAddEmployee); //get add-employee
 router.post("/add-employee", adminController.postEmployee); //Post add-employee
 
@@ -22,6 +24,10 @@ router.post("/delete", adminController.postDelete); //Delete
 router.get("/vacation-manager", adminController.getVacationManager); //vacation manager
 router.post("/vacation-manager", adminController.postVacationManager); //vacation manager
 
-router.get("/admin-nomina", adminController.getNomina); //nomina
+router.get("/cancel/:Id", adminController.getCancelVacation); //cancel vacation
+router.post("/cancel", adminController.postCancelVacation); //cancel vacation
+
+router.get("/admin-nomina", adminController.getNomina); //nomina.
+router.post("/admin-nomina", adminController.postNomina); //actualizar nomina.
 
 exports.router = router;

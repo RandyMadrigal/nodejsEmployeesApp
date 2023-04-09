@@ -7,8 +7,13 @@ const expressHbs = require("express-handlebars"); //Engine view
 const sequelize = require("./util/database/database");
 //Models
 const employeesModel = require("./model/employees");
+const departmentModel = require("./model/department");
+const positionModel = require("./model/position");
 
 const adminRouter = require("./routes/admin");
+const departmentRouter = require("./routes/department");
+const positionRouter = require("./routes/position");
+
 const loginRouter = require("./routes/login");
 const errorController = require("./controllers/error");
 
@@ -29,18 +34,32 @@ app.set("views", "./views");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-//DEMO USER
-
 app.use(loginRouter.router);
 app.use(adminRouter.router);
+app.use(departmentRouter.router);
+app.use(positionRouter.router);
 
 app.use("/", errorController.error);
+
+//Relations in the DB
+employeesModel.belongsTo(departmentModel, {
+  constraint: true,
+  OnDelete: "CASCADE",
+});
+departmentModel.hasMany(employeesModel);
+
+employeesModel.belongsTo(positionModel, {
+  constraint: true,
+  OnDelete: "CASCADE",
+});
+positionModel.hasMany(employeesModel);
+//Relations in the DB
 
 sequelize
   .sync()
   .then((result) => {
     app.listen(port, () => {
-      console.log("running in port " + port + " / Conexion de la bd exitosa");
+      console.log("running in port " + port + " / Conexion  exitosa");
     });
   })
   .catch((err) => {

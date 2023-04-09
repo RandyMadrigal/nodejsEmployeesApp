@@ -2,27 +2,89 @@ const dateHelper = require("../util/helpers/date");
 const nominaHlp = require("../util/helpers/nomina");
 const validateHlp = require("../util/helpers/validate");
 const Employees = require("../model/employees");
+const Department = require("../model/department");
+const Position = require("../model/position");
 
-exports.getIndex = (req, res, next) => {
-  Employees.findAll()
-    .then((result) => {
-      const item = result.map((result) => result.dataValues); //Estandar
-      res.render("index", {
-        titlePage: "Home",
-        date: dateHelper.getDate,
-        item: item,
-        hasItems: item.length > 0,
-      });
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+
+//filter in the index page.
+exports.getIndex = async (req, res, next) => {
+  try {
+    const department = await Department.findAll();
+    const position = await Position.findAll();
+
+    Employees.findAll({
+      include: [{ model: Department }, { model: Position }],
     })
-    .catch((err) => console.log(err));
+      .then((result) => {
+        const item = result.map((result) => result.dataValues); //Estandar
+        res.render("index", {
+          titlePage: "Home",
+          date: dateHelper.getDate,
+          item: item,
+          hasItems: item.length > 0,
+          activeBtn: department.length > 0 && position.length > 0,
+          filter: true,
+        });
+      })
+      .catch((err) => console.log(err));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-exports.getAddEmployee = (req, res, next) => {
-  res.render("admin/add-employee", {
-    pageTitle: "add-Employee",
-    date: dateHelper.getDate,
-    editMode: false,
-  });
+exports.postFilterIndex = async (req, res, next) => {
+  const filterName = req.body.filterName;
+  console.log(filterName);
+
+  try {
+    const department = await Department.findAll();
+    const position = await Position.findAll();
+
+    Employees.findAll(
+      { where: { Nombre: { [Op.like]: `%${filterName}%` } } },
+      {
+        include: [{ model: Department }, { model: Position }],
+      }
+    )
+      .then((result) => {
+        const item = result.map((result) => result.dataValues); //Estandar
+        res.render("index", {
+          titlePage: "Home",
+          date: dateHelper.getDate,
+          item: item,
+          hasItems: item.length > 0,
+          activeBtn: department.length > 0 && position.length > 0,
+          filter: true,
+        });
+      })
+      .catch((err) => console.log(err));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.getAddEmployee = async (req, res, next) => {
+  try {
+    let department = await Department.findAll();
+    let position = await Position.findAll();
+
+    const _department = department.map((department) => department.dataValues); //Estandar
+    const _position = position.map((position) => position.dataValues); //Estandar
+
+    res.render("admin/add-employee", {
+      pageTitle: "add-Employee",
+      date: dateHelper.getDate,
+      editMode: false,
+      position: _position,
+      hasPosition: _position.length > 0,
+      department: _department,
+      hasDepartment: _department.length > 0,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.postEmployee = (req, res, next) => {
@@ -35,8 +97,8 @@ exports.postEmployee = (req, res, next) => {
   const Genero = req.body.Genero;
   const Nacionalidad = req.body.Nacionalidad;
   const Direccion = req.body.Direccion;
-  const Departamento = req.body.Departamento;
-  const Cargo = req.body.Cargo;
+  const departmentId = req.body.DepartamentoId;
+  const positionId = req.body.CargoId;
   const Sueldo = req.body.Sueldo;
 
   Employees.create({
@@ -49,8 +111,8 @@ exports.postEmployee = (req, res, next) => {
     Genero: Genero,
     Nacionalidad: Nacionalidad,
     Direccion: Direccion,
-    Departamento: Departamento,
-    Cargo: Cargo,
+    departmentId: departmentId,
+    positionId: positionId,
     Sueldo: Sueldo,
   })
     .then((result) => {
@@ -66,9 +128,12 @@ exports.getDetails = (req, res, next) => {
     console.log("not found");
   }
 
-  Employees.findByPk(Id)
+  Employees.findByPk(Id, {
+    include: [{ model: Department }, { model: Position }],
+  })
     .then((result) => {
       const item = result.dataValues;
+      console.log(item);
       res.render("admin/details", {
         date: dateHelper.getDate,
         item: item,
@@ -86,7 +151,9 @@ exports.getAdminOptions = (req, res, next) => {
 };
 
 exports.getEditEmployee = (req, res, next) => {
-  Employees.findAll()
+  Employees.findAll({
+    include: [{ model: Department }, { model: Position }],
+  })
     .then((result) => {
       const item = result.map((result) => result.dataValues); //Estandar
       res.render("admin/admin-employee", {
@@ -94,28 +161,43 @@ exports.getEditEmployee = (req, res, next) => {
         date: dateHelper.getDate,
         item: item,
         hasItems: item.length > 0,
-        deleteEmployee: true,
       });
     })
     .catch((err) => console.log(err));
 };
 
-exports.getEdit = (req, res, next) => {
-  const editMode = req.query.edit;
-  const Id = req.params.Id;
+exports.getEdit = async (req, res, next) => {
+  try {
+    const editMode = req.query.edit;
+    const Id = req.params.Id;
 
-  Employees.findByPk(Id)
-    .then((result) => {
-      const item = result.dataValues;
+    let department = await Department.findAll();
+    let position = await Position.findAll();
 
-      res.render("admin/add-employee", {
-        pageTitle: "Edit-Employee",
-        date: dateHelper.getDate,
-        editMode: editMode,
-        item: item,
-      });
+    const _department = department.map((department) => department.dataValues); //Estandar
+    const _position = position.map((position) => position.dataValues); //Estandar
+
+    Employees.findByPk(Id, {
+      include: [{ model: Department }, { model: Position }],
     })
-    .catch((err) => console.log(err));
+      .then((result) => {
+        const item = result.dataValues;
+
+        res.render("admin/add-employee", {
+          pageTitle: "Edit-Employee",
+          date: dateHelper.getDate,
+          editMode: editMode,
+          item: item,
+          position: _position,
+          hasPosition: _position.length > 0,
+          department: _department,
+          hasDepartment: _department.length > 0,
+        });
+      })
+      .catch((err) => console.log(err));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.postEdit = (req, res, next) => {
@@ -129,11 +211,8 @@ exports.postEdit = (req, res, next) => {
   const Genero = req.body.Genero;
   const Nacionalidad = req.body.Nacionalidad;
   const Direccion = req.body.Direccion;
-  const Departamento = req.body.Departamento;
-  const Cargo = req.body.Cargo;
-  const Sueldo = req.body.Sueldo;
-
-  console.log(Apellido);
+  const departmentId = req.body.DepartmentId;
+  const positionId = req.body.CargoId;
 
   Employees.findByPk(Id)
     .then((item) => {
@@ -146,9 +225,8 @@ exports.postEdit = (req, res, next) => {
       item.Genero = Genero;
       item.Nacionalidad = Nacionalidad;
       item.Direccion = Direccion;
-      item.Departamento = Departamento;
-      item.Cargo = Cargo;
-      item.Sueldo = Sueldo;
+      item.departmentId = departmentId;
+      item.positionId = positionId;
       return item.save();
     })
     .then((result) => {
@@ -190,16 +268,24 @@ exports.postDelete = (req, res, next) => {
 };
 
 exports.getVacationManager = (req, res, next) => {
-  Employees.findAll({ order: [["Vacaciones", "ASC"]] })
+  Employees.findAll(
+    {
+      include: [{ model: Department }, { model: Position }],
+    },
+    {
+      order: [["isVacaciones", "ASC"]],
+    }
+  )
     .then((result) => {
       const item = result.map((result) => result.dataValues);
       res.render("admin/vacation-manager", {
         titlePage: "Vacation Manager",
-        date: dateHelper.getDate,
+        date: dateHelper.getDate, //helper
         item: item,
         hasItems: item.length > 0,
         helpers: {
-          validate: validateHlp.validate,
+          validate: validateHlp.validate, //helper
+          minDate: dateHelper.getMinDate, //helper
         },
       });
     })
@@ -208,11 +294,46 @@ exports.getVacationManager = (req, res, next) => {
 
 exports.postVacationManager = (req, res, next) => {
   const Id = req.body.Id;
-  let _vacaciones = req.body.Vacaciones;
+  let isVacaciones = req.body.isVacaciones;
+  let start = req.body.StartVacaciones;
+  let end = req.body.EndVacaciones;
 
-  console.log(_vacaciones);
+  Employees.update(
+    { isVacaciones: isVacaciones, StartVacaciones: start, EndVacaciones: end },
+    { where: { Id: Id } }
+  )
+    .then((result) => {
+      console.log(result);
+      res.redirect("/vacation-manager");
+    })
+    .catch((err) => console.log(err));
+};
 
-  Employees.update({ Vacaciones: _vacaciones }, { where: { Id: Id } })
+exports.getCancelVacation = (req, res, next) => {
+  const editMode = req.query.cancel;
+  const Id = req.params.Id;
+
+  Employees.findByPk(Id)
+    .then((result) => {
+      const item = result.dataValues;
+
+      res.render("admin/cancel-vacation", {
+        pageTitle: "Cancel-Vacation",
+        date: dateHelper.getDate,
+        editMode: editMode,
+        item: item,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.postCancelVacation = (req, res, next) => {
+  const Id = req.body.Id;
+
+  Employees.update(
+    { isVacaciones: false, StartVacaciones: null, EndVacaciones: null },
+    { where: { Id: Id } }
+  )
     .then((result) => {
       console.log(result);
       res.redirect("/vacation-manager");
@@ -221,7 +342,10 @@ exports.postVacationManager = (req, res, next) => {
 };
 
 exports.getNomina = (req, res, next) => {
-  Employees.findAll({ order: [["Sueldo", "DESC"]] })
+  Employees.findAll(
+    { include: [{ model: Department }, { model: Position }] },
+    { order: [["Sueldo", "DESC"]] }
+  )
     .then((result) => {
       const item = result.map((result) => result.dataValues); //Estandar
 
@@ -233,13 +357,28 @@ exports.getNomina = (req, res, next) => {
 
         helpers: {
           AFP: nominaHlp.AFP,
+
           SFS: nominaHlp.SFS,
+
           ANUAL: nominaHlp.SueldoAnual,
-          Descuentos: nominaHlp.TotalDescuento,
+
           SueltoNeto: nominaHlp.SueldoNeto,
+
           ISR: nominaHlp.ISR,
         },
       });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.postNomina = (req, res, next) => {
+  const Id = req.body.Id;
+  const Sueldo = req.body.Sueldo;
+
+  Employees.update({ Sueldo: Sueldo }, { where: { Id: Id } })
+    .then((result) => {
+      console.log(result);
+      res.redirect("/admin-nomina");
     })
     .catch((err) => console.log(err));
 };

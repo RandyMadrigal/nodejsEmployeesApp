@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">NOMBRE DE LA EMPRESA SRL.</h1>
-        <a href="/admin-options" class="btn btn-success my-2">Admin-options</a>
+        <a href="/admin-options" class="btn btn-success my-2">Volver a opciones</a>
       </div>
     </div>
   </section>
@@ -16,11 +16,11 @@
           <thead>
             <tr>
               <th scope="col">Nombre</th>
-              <th scope="col">Cedula</th>
               <th scope="col">Departamento</th>
               <th scope="col">Cargo</th>
-              <th scope="col">Sueldo</th>
               <th scope="col">Vacaciones</th>
+              <th scope="col">Inicio</th>
+              <th scope="col">Fin</th>
               <th scope="col"></th>
 
             </tr>
@@ -28,39 +28,54 @@
           <tbody class="table-group-divider">
             {{#if hasItems}}
               {{#each item}}
-                <tr>
-                  <td>{{this.Nombre}} {{this.Apellido}} </td>
-                  <td>{{this.Cedula}} </td>
-                  <td>{{this.Departamento}} </td>
-                  <td>{{this.Cargo}} </td>
-                  <td>RD$ {{this.Sueldo}} </td>
-                  <td>{{#if this.Vacaciones}}
-                      <i class="fa fa-umbrella-beach"> </i>
-                    {{else}}
-                      <i class="fa-solid fa-person-digging"></i>
-                    {{/if}}
-                  </td>
-                  <form action="/vacation-manager" method="post">
+                <form action="/vacation-manager" method="post">
+                  <tr>
+                    <td>{{this.Nombre}} {{this.Apellido}} </td>
+                    <td>{{this.department.dataValues.Nombre}} </td>
+                    <td>{{this.position.dataValues.Nombre}} </td>
+                    <td>{{#if this.isVacaciones}}Si{{else}}No{{/if}}</td>
+                    <td>
+                      <input required {{#if this.isVacaciones}} disabled {{/if}}
+                        type="date"
+                        name="StartVacaciones"
+                        id="StartVacaciones"
+                        min={{minDate}}
+                        value={{#if this.isVacaciones}}"{{this.StartVacaciones}}"{{else}} {{/if}}
+                        
+                      /></td>
+                    <td>
+                      <input required {{#if this.isVacaciones}} disabled {{/if}}
+                        type="date"
+                        name="EndVacaciones"
+                        id="EndVacaciones"
+                        value={{#if this.isVacaciones}}"{{this.EndVacaciones}}" {{else}} {{/if}}
+                        
+                      /></td>
+                  
 
-                    <input type="hidden" name="Id" value="{{this.Id}}" />
-                    <input
-                      type="hidden"
-                      name="Vacaciones"
-                      value="{{validate this.Vacaciones}}"
-                    />
+                      <input type="hidden" name="Id" value="{{this.Id}}" />
+                      <input
+                        type="hidden"
+                        name="isVacaciones"
+                        value="{{validate this.isVacaciones}}"
+                      />
 
-                    <td>{{#if this.Vacaciones}}
-                        <button type="submit" class="btn btn-danger">Desactivar
-                          Vacaciones</button>
-                      {{else}}
-                        <button type="submit" class="btn btn-primary">Activar
-                          Vacaciones</button>
-                      {{/if}}
-                    </td>
-
-                  </form>
-
-                </tr>
+                      <td>{{#if this.isVacaciones}}
+                          <a
+                          class="btn btn-danger"
+                          type="button"
+                          href="/cancel/{{this.Id}}?cancel=true"
+                        >Cancelar
+                        </a>
+                        {{else}}
+                          <button
+                            type="submit"
+                            class="btn btn-primary"
+                          >aprobar</button>
+                        {{/if}}
+                      </td>
+                  </tr>
+                 </form>
               {{/each}}
             {{/if}}
 

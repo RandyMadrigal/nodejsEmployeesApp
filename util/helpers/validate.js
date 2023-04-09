@@ -1,3 +1,4 @@
+//validar si el empleado esta de vacaciones
 exports.validate = (vacation) => {
   let validate;
   if (vacation === true) {

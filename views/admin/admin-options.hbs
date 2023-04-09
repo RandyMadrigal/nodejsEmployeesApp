@@ -9,32 +9,48 @@
   </section>
 
   <section>
-    <div class="py-5 bg-light">
+    <div class="py-2 bg-light">
       <div class="container-fluid">
-        <div
-          class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 justify-content-center"
-        >
-          <div class="d-flex flex-column justify-content-evenly">
-            <a
-              type="button"
-              class="btn btn-info fw-bold mb-2"
-              href="/admin-employee"
-            >Modificar / Cancelar Empleado</a>
-            <a
-              type="button"
-              class="btn btn-danger fw-bold mb-2"
-              href="/vacation-manager"
-            >Administracion de Empleados</a>
-            <a
-              type="button"
-              class="btn btn-warning fw-bold mb-2"
-              href="/admin-nomina"
-            >Nomina</a>
-          </div>
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-4 gap-3 justify-content-center">
+
+            <div class="card bg-light bg-gradient">
+              <img src="/img/modEmployee.png" class="img-fluid cardImg" alt="..." />
+              <div class="card-body">
+                <p class="card-title fw-bold">Modificar / Cancelar Empleados<p/>
+                <a
+                      type="button"
+                      class="btn btn-info  fw-bold "
+                      href="/admin-employee"
+                    ><i class="fa-sharp fa-solid fa-plus"></i></a>
+              </div>
+            </div>
+
+            <div class="card">
+              <img src="/img/vacationEmployee.png" class="img-fluid cardImg" alt="..." />
+              <div class="card-body">
+                <p class="card-title fw-bold">Administracion de Vacaciones<p/>
+                <a
+                      type="button"
+                      class="btn btn-danger fw-bold mb-2"
+                      href="/vacation-manager"
+                    ><i class="fa-sharp fa-solid fa-plus"></i></a>
+              </div>
+            </div>
+
+            <div class="card">
+              <img src="/img/nominaEmployee.png" class="img-fluid cardImg" alt="..." />
+              <div class="card-body">
+                <p class="card-title fw-bold">Nomina de Empleados.<p/>
+              <a
+                      type="button"
+                      class="btn btn-warning fw-bold mb-2"
+                      href="/admin-nomina"
+                    ><i class="fa-sharp fa-solid fa-plus"></i></a>
+              </div>
+            </div>
         </div>
       </div>
     </div>
-
   </section>
 
 </main>

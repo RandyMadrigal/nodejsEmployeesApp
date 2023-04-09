@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">NOMBRE DE LA EMPRESA SRL.</h1>
-        <a href="/admin-options" class="btn btn-success my-2">Admin-options</a>
+        <a href="/admin-options" class="btn btn-success my-2">Volver a opciones</a>
       </div>
     </div>
   </section>
@@ -20,23 +20,36 @@
                     <p class="card-title fs-5 fw-bold">{{this.Nombre}}
                       {{this.Apellido}}
                     </p>
-                    <p class="fw-bold gradient">
-                      {{#if this.Vacaciones}}
-                        <i class="fa fa-umbrella-beach"> Vacaciones</i>
-                      {{else}}
-                        <i class="fa-solid fa-person-digging">Activo</i>{{/if}}
-                    </p>
                     <p class="card-text">
                       <span class="fw-bold">Departamento:</span>
-                      {{this.Departamento}}</p>
+                      {{this.department.dataValues.Nombre}}</p>
                     <p class="card-text">
                       <span class="fw-bold">Cargo: </span>
-                      {{this.Cargo}}</p>
-                    <p class="card-text"><span class="fw-bold">Email:
-                      </span>{{this.Email}}</p>
+                      {{this.position.dataValues.Nombre}}</p>
                     <p class="card-text"><span class="fw-bold">Fecha de Ingreso:
                       </span>
                       {{this.createdAt}}</p>
+
+                    {{#if this.isVacaciones}}
+
+                      <hr />
+
+                      <h4>Vacaciones</h4>
+
+                      <div class="d-flex flex-row justify-content-start gap-3">
+
+                        <p class="card-text"><span class="fw-bold">Desde
+                          </span>
+                          {{this.StartVacaciones}}
+                        </p>
+                        <p class="card-text"><span class="fw-bold">Hasta
+                          </span>
+                          {{this.EndVacaciones}}
+                        </p>
+                      </div>
+
+                    {{/if}}
+
                     <div
                       class="d-flex justify-content-between align-items-center"
                     >
@@ -58,7 +71,6 @@
                         <input type="hidden" name="Id" value="{{this.Id}}" />
 
                       </div>
-
                     </div>
                   </div>
                 </div>

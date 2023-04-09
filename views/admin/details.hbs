@@ -25,11 +25,11 @@
                 <div class="d-flex justify-content-evenly">
                   <p class="card-text">
                     <span class="fw-bold">Departamento:</span>
-                    {{item.Departamento}}
+                    {{item.department.dataValues.Nombre}}
                   </p>
                   <p class="card-text">
                     <span class="fw-bold">Cargo: </span>
-                    {{item.Cargo}}
+                    {{item.position.dataValues.Nombre}}
                   </p>
                   <p class="card-text">
                     <span class="fw-bold">Sueldo: </span>
@@ -86,10 +86,26 @@
                   <p class="card-text"><span class="fw-bold">¿Esta de
                       vacaciones?
                     </span>
-                    {{#if item.Vacaciones}} Si {{else}} No {{/if}}
+                    {{#if item.isVacaciones}} Si {{else}} No {{/if}}
                   </p>
                 </div>
                 <hr />
+
+                {{#if item.isVacaciones}}
+                  <div class="d-flex justify-content-evenly">
+                    <p class="card-text"><span class="fw-bold">Inicio de
+                        vacaciones:
+                      </span>
+                      {{item.StartVacaciones}}
+                    </p>
+                    <p class="card-text"><span class="fw-bold">Fin de las
+                        vacaciones:
+                      </span>
+                      {{item.EndVacaciones}}
+                    </p>
+                  </div>
+                  <hr />
+                {{/if}}
 
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">

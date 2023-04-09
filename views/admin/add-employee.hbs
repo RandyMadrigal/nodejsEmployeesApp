@@ -134,48 +134,61 @@
             <div class="row g-3">
 
               <div class="col-4">
-                <label
-                  for="Departamento"
-                  class="form-label"
-                >Departamento</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="Departamento"
-                  name="Departamento"
-                {{#if editMode}}  value="{{item.Departamento}}"{{/if}}
-                  required
-                />
-              </div>
+                <label for="Departamento" class="form-label">Departamento</label>
+                <select name="DepartmentId" class="form-select" id="DepartmentId" required>
 
-            <div class="col-4">
-                <label for="Cargo" class="form-label">Cargo</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="Cargo"
-                  name="Cargo"
-                 {{#if editMode}} value="{{item.Cargo}}"{{/if}}
-                  required
-                />
+                  {{#if editMode}} <option selected value={{item.department.dataValues.Id}}>{{item.department.dataValues.Nombre}} </option> {{/if}}
+                  
+                 {{#if hasDepartment}}
+                  {{#each department}}
+                     <option  value={{this.Id}}>{{this.Nombre}} </option>
+                  {{/each}}
+                 {{else}}
+
+                 {{/if}}
+                </select>
               </div>
 
               <div class="col-4">
-                <label for="Sueldo" class="form-label">Sueldo</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="Sueldo"
-                  name="Sueldo"
-                 {{#if editMode}}value="{{item.Sueldo}}" {{/if}}
-                  required
-                />
+                <label for="Cargo" class="form-label">Cargo</label>
+                <select name="CargoId" class="form-select" id="CargoId" required>
+                 {{#if editMode}} <option selected value={{item.position.dataValues.Id}}>{{item.position.dataValues.Nombre}} </option> {{/if}}
+
+                 {{#if hasPosition}}
+                  {{#each position}}
+                    <option value={{this.Id}}>{{this.Nombre}} </option>
+                  {{/each}}
+                 {{else}}
+
+                 {{/if}}
+                </select>
+
+                <!--  -->
               </div>
+
+              {{#if editMode}}
+
+              {{else}}
+                <div class="col-4">
+                  <label for="Sueldo" class="form-label">Sueldo</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="Sueldo"
+                    name="Sueldo"
+                    required
+                    min="10000"
+                    max="1000000"
+                  />
+              </div>
+
+              {{/if}}
+  
 
               <div class="d-flex justify-content-center">
                 <button class="btn btn-success me-2" type="submit">{{#if editMode}}Editar{{else}}Agregar{{/if}}
                   </button>
-                <a class="btn btn-secondary" type="button" href={{#if editMode}}"/admin-employee"{{else}}"/index"{{/if}} >atras</a>
+                <a class="btn btn-secondary" type="button" href={{#if editMode}}"/admin-employee"{{else}}"/index"{{/if}} >Atras</a>
               </div>
 
               {{#if editMode}} <input type="hidden" name="Id" value="{{item.Id}}">{{/if}}
