@@ -18,23 +18,27 @@
             <div class="container">
               <div class="row">
                 <div class="col-lg-10 col-xl-7 mx-auto">
-                  <h2>Login ------------------ </h2>
 
-                  <div class="form-group mb-3">
-                    <input
-                      id="UserName"
-                      name="UserName"
-                      type="text"
-                      placeholder="DEMO USERNAME --> ADMIN"
-                      class="form-control rounded-pill border-0 shadow-sm px-4"
-                      required
-                    />
-                  </div>
-                  <a
-                    type="button"
-                    href="/index"
-                    class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"
-                  >Sign in</a>
+                  <h2>Login </h2>
+
+                  <form action="/" method="post">
+                    <div class="form-group mb-3">
+                      <input
+                        id="UserName"
+                        name="UserName"
+                        type="text"
+                        placeholder="USERNAME --> ADMIN"
+                        class="form-control shadow-sm"
+                        required
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      class="btn btn-primary text-uppercase mb-2"
+                    >Sign in
+                    </button>
+                  </form>
 
                 </div>
               </div>

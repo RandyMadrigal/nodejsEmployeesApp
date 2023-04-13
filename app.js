@@ -6,6 +6,7 @@ const expressHbs = require("express-handlebars"); //Engine view
 //Database
 const sequelize = require("./util/database/database");
 //Models
+const adminUser = require("./model/adminUser");
 const employeesModel = require("./model/employees");
 const departmentModel = require("./model/department");
 const positionModel = require("./model/position");
@@ -56,8 +57,17 @@ positionModel.hasMany(employeesModel);
 //Relations in the DB
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
+    return adminUser.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      return adminUser.create({ UserName: "ADMIN" });
+    }
+    return user;
+  })
+  .then((user) => {
     app.listen(port, () => {
       console.log("running in port " + port + " / Conexion  exitosa");
     });
