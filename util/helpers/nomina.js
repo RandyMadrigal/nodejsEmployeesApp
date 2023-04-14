@@ -5,12 +5,6 @@ const convertMoney = (numero) => {
   }).format(numero);
 };
 
-exports.Sueldo = (Sueldo) => {
-  const sueldo = parseInt(Sueldo);
-
-  return convertMoney(sueldo);
-};
-
 exports.SueldoAnual = (Sueldo) => {
   const Anual = parseInt(Sueldo) * parseInt(12);
 
@@ -55,7 +49,6 @@ exports.ISR = (Sueldo) => {
     total = (ISR + VALOR_ESCALA_MINIMA) / 12;
     return convertMoney(total);
   }
-
   if (SueldoAnual >= 624329.01 && SueldoAnual <= 867123) {
     ISR = (SueldoAnual - ESCALA_MEDIA) * PORCENTAJE_MEDIA;
     total = (ISR + VALOR_ESCALA_MEDIA) / 12;
