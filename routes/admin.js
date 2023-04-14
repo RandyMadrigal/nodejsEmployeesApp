@@ -3,8 +3,8 @@ const router = express.Router();
 
 const adminController = require("../controllers/admin");
 
-router.get("/index", adminController.getIndex); //home admin
-router.post("/index", adminController.postFilterIndex); //home admin with filters employees by name
+router.get("/index/", adminController.getIndex); //home admin
+router.get("/index/:filterName", adminController.getIndex); //home admin
 
 router.get("/add-employee", adminController.getAddEmployee); //get add-employee
 router.post("/add-employee", adminController.postEmployee); //Post add-employee

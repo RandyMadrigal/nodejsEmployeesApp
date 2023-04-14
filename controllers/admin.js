@@ -10,44 +10,20 @@ const Op = Sequelize.Op;
 
 //filter in the index page.
 exports.getIndex = async (req, res, next) => {
+  let filterName = req.query.filterName;
+
+  if (filterName === undefined || filterName === null) {
+    filterName = "";
+  }
+
   try {
     const department = await Department.findAll();
     const position = await Position.findAll();
 
     Employees.findAll({
+      where: { Nombre: { [Op.like]: `%${filterName}%` } },
       include: [{ model: Department }, { model: Position }],
     })
-      .then((result) => {
-        const item = result.map((result) => result.dataValues); //Estandar
-        res.render("index", {
-          titlePage: "Home",
-          date: dateHelper.getDate,
-          item: item,
-          hasItems: item.length > 0,
-          activeBtn: department.length > 0 && position.length > 0,
-          filter: true,
-        });
-      })
-      .catch((err) => console.log(err));
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-exports.postFilterIndex = async (req, res, next) => {
-  const filterName = req.body.filterName;
-  console.log(filterName);
-
-  try {
-    const department = await Department.findAll();
-    const position = await Position.findAll();
-
-    Employees.findAll(
-      { where: { Nombre: { [Op.like]: `%${filterName}%` } } },
-      {
-        include: [{ model: Department }, { model: Position }],
-      }
-    )
       .then((result) => {
         const item = result.map((result) => result.dataValues); //Estandar
         res.render("index", {
@@ -97,7 +73,7 @@ exports.postEmployee = (req, res, next) => {
   const Genero = req.body.Genero;
   const Nacionalidad = req.body.Nacionalidad;
   const Direccion = req.body.Direccion;
-  const departmentId = req.body.DepartamentoId;
+  const departmentId = req.body.DepartmentId;
   const positionId = req.body.CargoId;
   const Sueldo = req.body.Sueldo;
 
@@ -138,6 +114,9 @@ exports.getDetails = (req, res, next) => {
         date: dateHelper.getDate,
         item: item,
         titlePage: "Home",
+        helpers: {
+          Sueldo: nominaHlp.Sueldo,
+        },
       });
     })
     .catch((err) => console.log(err));
@@ -362,7 +341,7 @@ exports.getNomina = (req, res, next) => {
 
           ANUAL: nominaHlp.SueldoAnual,
 
-          SueltoNeto: nominaHlp.SueldoNeto,
+          SueldoNeto: nominaHlp.SueldoNeto,
 
           ISR: nominaHlp.ISR,
         },

@@ -57,7 +57,7 @@ positionModel.hasMany(employeesModel);
 //Relations in the DB
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then((result) => {
     return adminUser.findByPk(1);
   })

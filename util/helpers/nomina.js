@@ -5,6 +5,12 @@ const convertMoney = (numero) => {
   }).format(numero);
 };
 
+exports.Sueldo = (Sueldo) => {
+  const sueldo = parseInt(Sueldo);
+
+  return convertMoney(sueldo);
+};
+
 exports.SueldoAnual = (Sueldo) => {
   const Anual = parseInt(Sueldo) * parseInt(12);
 
