@@ -75,8 +75,6 @@ exports.SueldoNeto = (Sueldo) => {
   const SFS = this.SFS(Sueldo);
   const ISR = this.ISR(Sueldo);
 
-  console.log(ISR + "********" + typeof ISR);
-
   if (ISR == 0 || ISR == null || ISR == undefined) {
     total =
       parseFloat(Sueldo) -

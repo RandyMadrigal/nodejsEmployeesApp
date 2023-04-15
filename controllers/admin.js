@@ -92,7 +92,7 @@ exports.postEmployee = (req, res, next) => {
     Sueldo: Sueldo,
   })
     .then((result) => {
-      console.log("Created Employee");
+      console.log("Empleado creado con exito");
       res.redirect("/index");
     })
     .catch((err) => console.log(err));

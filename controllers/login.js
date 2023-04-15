@@ -21,7 +21,6 @@ exports.postLogin = (req, res, next) => {
         .then((isEqual) => {
           if (isEqual) {
             console.log("Welcome");
-
             return res.redirect("/index");
           }
           return res.redirect("/");

@@ -26,7 +26,7 @@ exports.postPosition = (req, res, next) => {
       Nombre: Nombre,
     })
       .then((result) => {
-        console.log("Created");
+        console.log("Creado con exito");
         res.redirect("/add-position");
       })
       .catch((err) => console.log(err));
