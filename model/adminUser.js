@@ -14,6 +14,11 @@ const adminUser = sequelize.define("AdminUsers", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+
+  Password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = adminUser;

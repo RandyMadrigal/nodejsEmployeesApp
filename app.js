@@ -5,6 +5,8 @@ const path = require("path");
 const expressHbs = require("express-handlebars"); //Engine view
 //Database
 const sequelize = require("./util/database/database");
+const bcryptjs = require("bcryptjs");
+
 //Models
 const adminUser = require("./model/adminUser");
 const employeesModel = require("./model/employees");
@@ -57,13 +59,17 @@ positionModel.hasMany(employeesModel);
 //Relations in the DB
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
     return adminUser.findByPk(1);
   })
   .then((user) => {
     if (!user) {
-      return adminUser.create({ UserName: "ADMIN" });
+      const hash = bcryptjs.hashSync(`ADMIN`, 8);
+      return adminUser.create({
+        UserName: "ADMIN",
+        Password: hash,
+      });
     }
     return user;
   })
